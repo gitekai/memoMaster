@@ -1,17 +1,13 @@
 import React from "react";
 import NumberSlide from "./NumberSlide";
-import Button from '@material-ui/core/Button';
-import Answer from './Answer';
+import Button from "@material-ui/core/Button";
+import Answer from "./Answer";
+import Countdown from "./Counter";
+import "./Game.css";
 
+const NUMBER_LENGTH = 20;
+const ANSWER_WAITING_TIME = 10;
 
-const NUMBER_LENGTH=4;
-const ANSWER_WAITING_TIME=2;
-
-function timeOut(interval){
-  return new Promise((resolve) => {
-    setTimeout(()=>{ return resolve()}, interval * 1000);
-  })  
-}
 
 function generateRandomNumber(desiredLength) {
   let number = "";
@@ -26,8 +22,9 @@ class Game extends React.Component {
     number: "",
     gameStart: null,
     wantsToAnswer: false,
-    answer: '',
-    displayedNumber: '',
+    hasWaitedToAnswer: false,
+    answer: "",
+    displayedNumber: ""
   };
 
   startGame = () => {
@@ -37,50 +34,76 @@ class Game extends React.Component {
     });
   };
 
-  setDisplayedNumber = (val) => {
-    this.setState({displayedNumber : val })
-  }
+  setDisplayedNumber = val => {
+    this.setState({ displayedNumber: val });
+  };
 
   wantsToAnswer = async () => {
-      await timeOut(ANSWER_WAITING_TIME); 
-      this.setState({wantsToAnswer: true})
-  }
+    this.setState({ wantsToAnswer: true });
+  };
 
-  onAnswerInputChange = (val) => {
-    this.setState({answer: val})
-  }
+  onAnswerInputChange = val => {
+    this.setState({ answer: val });
+  };
 
   onAnswerSubmit = () => {
-    const {answer , number} = this.state; 
-    if( answer === number ){
-      alert("you won")
+    const { answer, number } = this.state;
+    if (answer === number) {
+      alert("you won");
     } else {
-      alert("you loose")
+      alert("you loose");
     }
+  };
+
+  onCountDownEnd = (val) => {
+    this.setState({ hasWaitedToAnswer : val })
   }
 
   render() {
-    const { gameStart, number, wantsToAnswer } = this.state;
+    const { gameStart, number, wantsToAnswer, hasWaitedToAnswer } = this.state;
 
-    if(gameStart === null ){
-      return(
-        <Button variant="contained" onClick={this.startGame}>START</Button>
-      );
-    } 
-
-    if (!wantsToAnswer ){
-      return(
-        <NumberSlide digits={number} maxNumberLength={2} >
-            <Button variant="contained" onClick={this.wantsToAnswer}>FINISHED ?¿</Button>
-          </NumberSlide>
+    if (gameStart === null) {
+      return (
+        <div id="mainContent">
+          <Button variant="contained" onClick={this.startGame}>
+            START
+          </Button>
+        </div>
       );
     }
 
-    return (
-      <Answer onAnswer={this.onAnswerSubmit} onChange={this.onAnswerInputChange} value={this.answer}/>
-    );
+    if (!wantsToAnswer) {
+      return (
+        <div id="mainContent">
+          <NumberSlide digits={number} maxNumberLength={2}>
+            <Button variant="contained" onClick={this.wantsToAnswer}>
+              FINISHED ?¿
+            </Button>
+          </NumberSlide>
+        </div>
+      );
+    }
 
-   
+    if (wantsToAnswer && ! hasWaitedToAnswer) {
+      return (
+        <div id="mainContent">
+          <Countdown counter={ANSWER_WAITING_TIME} onCountdownEnd={this.onCountDownEnd} />
+        </div>
+      );
+    }
+
+    if(hasWaitedToAnswer){
+      return (
+        <div id="mainContent">
+          <Answer
+            onAnswer={this.onAnswerSubmit}
+            onChange={this.onAnswerInputChange}
+            value={this.answer}
+          />
+        </div>
+      );
+    }
+
   }
 }
 

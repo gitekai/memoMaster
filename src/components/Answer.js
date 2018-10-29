@@ -10,15 +10,18 @@ class Answer extends React.Component {
   }
 
   render() {
-    const { value, placeholder, onAnswer } = this.props;
+    const { value, onAnswer } = this.props;
     return (
       <div id="answer">
+        <div id="answerInput">
         <TextField
-          placeholder={placeholder}
+          className="materialTextField"
+          label="Answer"
           onChange={this.onInputChange}
           value={value}
         />
-      <Button variant="contained" onClick={onAnswer}>Submit answer</Button>
+        </div>
+      <Button className="answerButton" variant="contained" onClick={onAnswer}>Submit answer</Button>
       </div>
     );
   }
