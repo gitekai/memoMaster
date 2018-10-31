@@ -24,7 +24,6 @@ class Game extends React.Component {
     wantsToAnswer: false,
     hasWaitedToAnswer: false,
     answer: "",
-    displayedNumber: ""
   };
 
   startGame = () => {
@@ -32,10 +31,6 @@ class Game extends React.Component {
       gameStart: Date.now(),
       number: generateRandomNumber(NUMBER_LENGTH)
     });
-  };
-
-  setDisplayedNumber = val => {
-    this.setState({ displayedNumber: val });
   };
 
   wantsToAnswer = async () => {
@@ -98,7 +93,7 @@ class Game extends React.Component {
           <Answer
             onAnswer={this.onAnswerSubmit}
             onChange={this.onAnswerInputChange}
-            value={this.answer}
+            value={this.state.answer}
           />
         </div>
       );

@@ -2,22 +2,16 @@ import React from "react";
 import "./NumberSlide.css";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-function getPercentage(currentStep, stepsTotal) {
-  const percentage = Math.round(((currentStep + 1) / (stepsTotal - 1)) * 100);
-  console.log(`${currentStep} / ${stepsTotal - 1} * 100 = ${percentage}`);
-  return percentage < 100 ? percentage : 100;
-}
 
 class NumberSlide extends React.Component {
   state = {
     position: 0,
-    percentage: 0,
-    levelPassed: false
+    isLastSlide: false
   };
 
-  showNumberPart = () => {
+   getActiveNumber = _ => {
     const { digits, maxNumberLength } = this.props;
-    const { position } = this.state;
+    const {position} = this.state
 
     const firstPosition = maxNumberLength * position;
     const lastPosition = firstPosition + maxNumberLength * 1;
@@ -32,44 +26,47 @@ class NumberSlide extends React.Component {
   }
 
   onNextNumber = () => {
-    const maxPosition = this.getMaxPosition();
-
+    
     this.setState(currState => {
+      const maxPosition = this.getMaxPosition();
       const newPosition =
         currState.position === maxPosition
           ? currState.position
           : currState.position + 1;
-      const percentage = (newPosition / maxPosition) * 100;
-      const levelPassed = currState.position === maxPosition ? true : false;
+
+      const isLastSlide = currState.position === maxPosition ? true : false;
 
       return {
         position: newPosition,
-        percentage,
-        levelPassed
+        isLastSlide
       };
     });
   };
 
   onNumberBefore = () => {
-    const maxPosition = this.getMaxPosition();
-
+    
     this.setState(currState => {
       const { position } = currState;
+      const maxPosition = this.getMaxPosition();
+
       const newPosition =
-        position > 0 && !currState.levelPassed ? position - 1 : position;
-      const percentage = (newPosition / maxPosition) * 100;
+        position > 0 ? position - 1 : position;
+      const isLastSlide = (newPosition === maxPosition) ? true : false;
 
       return {
         position: newPosition,
-        percentage,
-        levelPassed: false
+        isLastSlide,
       };
     });
   };
 
   render() {
     const { children } = this.props;
-    const { percentage, levelPassed } = this.state;
+    const { isLastSlide, position } = this.state;
+
+    const maxPosition = this.getMaxPosition();
+    const percentage = (position / maxPosition) * 100;
+    const activeNumber = this.getActiveNumber(position);
 
     return (
       <div id="numberSlide">
@@ -83,9 +80,7 @@ class NumberSlide extends React.Component {
           <img src="arrowLeft.svg" alt="arrowLeft" />
         </div>
 
-        <div id="number">
-          {levelPassed ? children : this.showNumberPart()}
-        </div>
+        <div id="number">{isLastSlide ? children : activeNumber}</div>
 
         <div
           id="rightArrow"
@@ -98,6 +93,9 @@ class NumberSlide extends React.Component {
         </div>
         <div />
         <div id="indicator">
+          <div id="position">
+            <span id="activeNumber">{position + 1}</span> of {maxPosition + 1}
+          </div>
           <LinearProgress variant="determinate" value={percentage} />
         </div>
       </div>

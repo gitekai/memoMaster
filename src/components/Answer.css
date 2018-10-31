@@ -1,16 +1,31 @@
 #answer {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr  1fr  1fr;
+  grid-template-rows: auto;
+
+  grid-template-areas: 
+  "group group group"
+  " . answer ."
+  " . . ."
+  ;
 }
 
 #answerInput{
-  width: 25%;
-  margin-bottom: 3em;
+  grid-area: answer;
 }
+
+#answerButton {
+  margin-top: 1.5em;
+}
+
+#answerGrouped{
+  margin: 0 1em;
+  grid-area: group;
+}
+
+
 
 .materialTextField{
   width:100%
