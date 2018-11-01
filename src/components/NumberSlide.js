@@ -1,6 +1,21 @@
 import React from "react";
 import "./NumberSlide.css";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import NumberToMajor from "./NumberToMajor";
+import PositionToPlace from "./PositionToPlace";
+
+const majorSystem = {
+  "00":"sosse",
+  "01": "seide",
+  "02": "sahne",
+  "03": "Zaum", 
+  "04": "Zar",
+  "05": "Seil",
+  "06": "Sushi",
+  "07": "Socke",
+  "08": "Seife",
+  "09": "Suppe"
+}
 
 
 class NumberSlide extends React.Component {
@@ -8,6 +23,8 @@ class NumberSlide extends React.Component {
     position: 0,
     isLastSlide: false
   };
+
+
 
    getActiveNumber = _ => {
     const { digits, maxNumberLength } = this.props;
@@ -67,7 +84,8 @@ class NumberSlide extends React.Component {
     const maxPosition = this.getMaxPosition();
     const percentage = (position / maxPosition) * 100;
     const activeNumber = this.getActiveNumber(position);
-
+    const Number = <NumberToMajor number={activeNumber}  numberToMajorObj={majorSystem}/>
+    const Position = <PositionToPlace position={position+1} objectsInOnePlace={2} total={maxPosition+1}/>
     return (
       <div id="numberSlide">
         <div
@@ -80,7 +98,7 @@ class NumberSlide extends React.Component {
           <img src="arrowLeft.svg" alt="arrowLeft" />
         </div>
 
-        <div id="number">{isLastSlide ? children : activeNumber}</div>
+        <div id="number">{isLastSlide ? children : Number }</div>
 
         <div
           id="rightArrow"
@@ -94,7 +112,7 @@ class NumberSlide extends React.Component {
         <div />
         <div id="indicator">
           <div id="position">
-            <span id="activeNumber">{position + 1}</span> of {maxPosition + 1}
+            {Position}
           </div>
           <LinearProgress variant="determinate" value={percentage} />
         </div>

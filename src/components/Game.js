@@ -23,7 +23,7 @@ class Game extends React.Component {
     gameStart: null,
     wantsToAnswer: false,
     hasWaitedToAnswer: false,
-    answer: "",
+    answer: [],
   };
 
   startGame = () => {

@@ -14,7 +14,6 @@
 
   font-size: 1.2em;
   border-radius:inherit;
-  background: lightcoral;
 }
 #ginumber {
   font-size: 1em;
@@ -23,4 +22,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#giposition.isActive {
+  background: green;
+}
+#giposition.nonActive {
+  background: lightgray;
 }
