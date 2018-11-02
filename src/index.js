@@ -2,9 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import Game from './components/Game';
-import Numbers from './components/GroupedNumbers'
 import * as serviceWorker from './serviceWorker';
-import Answer from './components/AnswerII';
 
 ReactDOM.render(<Game />, document.getElementById('root'));
 

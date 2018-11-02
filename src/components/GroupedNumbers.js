@@ -1,37 +1,37 @@
 import React from "react";
-import NumberItem from './GroupedNumberItem';
-import './GroupedNumbers.css';
+import NumberItem from "./GroupedNumberItem";
+import "./GroupedNumbers.css";
 
 class GroupedNumber extends React.Component {
+  setActiveIndex = index => {
+    this.props.setActiveIndex(index);
+  };
 
   produceNumberArray() {
-    const { answer = [] } = this.props;
-
-    return answer.map((answer, idx, arr) => (idx === arr.length-1 ) 
-  ? <NumberItem isActive={true} number={answer} position={idx + 1} />
-    :<NumberItem isActive={false} number={answer} position={idx + 1} />)
+    const { answer = [], activeIndex = 0 } = this.props;
+    console.log("anser =======");
+    console.log(answer)
+    return answer.map((group, idx) => {
+      const isActive = idx === activeIndex ? true : false;
+      return (
+        <div class="item">
+          <NumberItem
+            isActive={isActive}
+            number={group}
+            position={idx + 1}
+            onSelect={() => {
+              this.setActiveIndex(idx);
+            }}
+          />
+        </div>
+      );
+    });
   }
-  /* 
-
-   const res = [];
-   
-   for(let i=0, maxIndex=0;maxIndex < answer.length ;i++){
-     const partialString = answer.slice(maxIndex,maxIndex+maxNumber); 
-     res.push( <div className="item"><NumberItem number={partialString} position={i+1}/></div>)
-     maxIndex += maxNumber;
-   }
-   return res; 
-
- }*/
 
   render() {
     const numbers = this.produceNumberArray();
 
-    return (
-      <div id="groupedNumbers">
-        {numbers}
-      </div>
-    );
+    return <div id="groupedNumbers">{numbers}</div>;
   }
 }
 
