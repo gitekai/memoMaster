@@ -10,24 +10,11 @@ import Account from "./components/Account";
 import Configuration from "./components/Configuration";
 import Navigation from "./Navigation";
 import MajorInputs from "./components/MajorSystemInput";
-
-class App extends React.Component {
-
-  state = {
-    authUser: null,
-  }
+import withAuthentication from './components/withAuthentication';
 
 
-  componentDidMount(){
-    firebase.auth.onAuthStateChanged(authUser => {
-      authUser 
-      ? this.setState({authUser,  })
-      : this.setState({ authUser: null });
-    })
-  }
-
-  render() {
-    const {authUser} = this.state; 
+const App = ({authUser}) => {
+  
     return (
       <Router>
         <div>
@@ -45,7 +32,6 @@ class App extends React.Component {
         </div>
       </Router>
     );
-  }
 }
 
-export default App;
+export default withAuthentication(App);

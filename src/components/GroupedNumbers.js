@@ -14,7 +14,7 @@ class GroupedNumber extends React.Component {
     return answer.map((group, idx) => {
       const isActive = idx === activeIndex ? true : false;
       return (
-        <div class="item">
+        <div className="item" key={idx}>
           <NumberItem
             isActive={isActive}
             number={group}

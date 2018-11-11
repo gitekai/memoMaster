@@ -6,7 +6,7 @@ import "./Answer.css";
 
 class AnswerII extends React.Component {
   state = {
-    inputVal: null,
+    inputVal: '',
     answerGrouped: [],
     activeIndex: 0
   };
