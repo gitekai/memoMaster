@@ -8,8 +8,11 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import AuthUserContext from './AuthUserContext';
 import FormControl from '@material-ui/core/FormControl';
+import './MajorSystem.css';
+
 
 import { auth, database } from '../firebase';
+import withMajorNumber from './withMajorNumber'; 
 
 class MajorSystemInputs extends React.Component {
   static contextType = AuthUserContext;
@@ -19,7 +22,6 @@ class MajorSystemInputs extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.context.authUser)
     database.onceGetMajorSystem().then(snapshot => {
       const a = snapshot.val()
       const firstID = Object.keys(a)[0]
@@ -50,12 +52,13 @@ class MajorSystemInputs extends React.Component {
   };
 
   getInputArray() {
-    const { inputs, majorNumberLength } = this.state;
+    const { inputs, majorNumberLength, activeFocus } = this.state;
 
     const elementArray = [];
     const startPos = '0'.repeat(majorNumberLength);
-    for (let i = startPos; i.length === majorNumberLength; i = returnNextCount(i)) {
-      const element = <Input pos={i} value={inputs[i]} onBlur={event => this.onInputChange(event, i)} />
+    for (let i = startPos,count=0; i.length === majorNumberLength; i = returnNextCount(i),count++) {
+      const className = ( (count + 1) % 10 == 0 ) ? 'extraSpace' : ''
+      const element = <Input pos={i} value={inputs[i]} onChange={event => this.onInputChange(event, i)} cl={className}/>
       elementArray.push(element);
     }
 
@@ -102,21 +105,25 @@ function returnNextCount(countActual) {
 }
 
 
-const Input = ({ pos, value, onBlur }) => {
+const Input = ({ pos, value, onChange, cl}) => {
   return (
+    <div className={`majorInputItem ${cl}`}>
     <TextField
-      variant="filled"
+      className={cl}
+      variant="outlined"
+      fullWidth
       type="text"
       label={pos}
       key={pos}
-      onChange={onBlur}
+      onChange={onChange}
       value={value}
     />
+    </div>
   );
 }
 
 const LengthSelect = ({ value, handleChange }) =>
-  <FormControl variant="filled">
+  <FormControl variant="outlined">
     <InputLabel htmlFor="outlined-age-simple">age</InputLabel>
     <Select
       value={value}
