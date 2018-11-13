@@ -20,3 +20,7 @@ auth.sendPasswordResetEmail(email);
 export const doPasswordUpdate = (password) =>
 auth.currentUser.updatePassword(password);
 
+export const getCurrentUser = async () => await auth.currentUser; 
+
+
+

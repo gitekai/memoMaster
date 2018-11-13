@@ -1,65 +1,92 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import Button from "@material-ui/core/Button";
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import InputLabel from '@material-ui/core/InputLabel';
 import AuthUserContext from './AuthUserContext';
-import FormControl from '@material-ui/core/FormControl';
+import withAuthorization from './withAuthorization';
+import withMajorNumbers from './withMajorNumber';
+import { database } from '../firebase';
 import './MajorSystem.css';
 
 
-import { auth, database } from '../firebase';
-import withMajorNumber from './withMajorNumber'; 
+
+const initialState = (majorNumberLength) => {
+  const retObj = {};
+  const startPos = '0'.repeat(majorNumberLength);
+  for (let i = startPos; i.length === majorNumberLength; i = returnNextCount(i)) {
+    retObj[i]='';
+  }
+  return {...retObj}; 
+}
 
 class MajorSystemInputs extends React.Component {
-  static contextType = AuthUserContext;
+
+
   state = {
-    inputs: {},
-    majorNumberLength: 1,
+    inputs: initialState(2),
+    majorNumberLength:2,
+    actualFocus: 0,
   };
-
-  componentDidMount() {
-    database.onceGetMajorSystem().then(snapshot => {
-      const a = snapshot.val()
-      const firstID = Object.keys(a)[0]
-      const majorSystem = a[firstID];
-      this.setState({ inputs: majorSystem })
-    });
-
-  }
 
   onSubmit = (authUser) => {
     const { inputs } = this.state;
-    console.log(authUser.uid)
     database.doCreateMayorSystem(authUser.uid, inputs);
   }
 
-  onSelectChange = (value) => {
+  componentWillReceiveProps(nextProps){
+    this.setState({ inputs: nextProps.majorSystem})
+  }
+
+  onRangeChange = (value) => {
     this.setState({
-      majorNumberLength: value
+      majorNumberLength: 1*value
     });
   }
 
+
   onInputChange = (event, displayNumber) => {
     const value = event.target.value;
-
     this.setState(currVal => {
-      return { inputs: { ...currVal.inputs, [displayNumber]: value } };
+      const kk = (/\s+$/.test(value)) ? currVal.actualFocus + 1 : currVal.actualFocus;
+      return { inputs: { ...currVal.inputs, [displayNumber]: value }, actualFocus: kk };
     });
   };
 
   getInputArray() {
-    const { inputs, majorNumberLength, activeFocus } = this.state;
+    const { majorNumberLength, inputs, actualFocus } = this.state;
 
     const elementArray = [];
     const startPos = '0'.repeat(majorNumberLength);
     for (let i = startPos,count=0; i.length === majorNumberLength; i = returnNextCount(i),count++) {
-      const className = ( (count + 1) % 10 == 0 ) ? 'extraSpace' : ''
-      const element = <Input pos={i} value={inputs[i]} onChange={event => this.onInputChange(event, i)} cl={className}/>
-      elementArray.push(element);
+      const className = ( (count + 1) % 10 === 0 ) ? 'extraSpace' : ''
+      //const ref = (count===3) ? (ref) => { this.focused = ref} : null
+      //<Input pos={i} value={inputs[i]} onChange={event => this.onInputChange(event, i)} cl={className} r={ref}/>
+      const element = 
+      <div className={`majorInputItem ${className}`}>
+      {count === actualFocus 
+    ? <TextField
+      className={className}
+      autoFocus
+      variant="outlined"
+      fullWidth
+      type="text"
+      label={i}
+      key={i}
+      onChange={event => this.onInputChange(event, i)}
+      value={inputs[i]}
+    /> 
+    : <TextField
+    className={className}
+    variant="outlined"
+    fullWidth
+    type="text"
+    label={i}
+    key={i}
+    onChange={event => this.onInputChange(event, i)}
+    value={inputs[i]}
+    />}
+    </div>
+    
+    elementArray.push(element);
     }
 
     return elementArray;
@@ -69,7 +96,7 @@ class MajorSystemInputs extends React.Component {
     const { majorNumberLength } = this.state;
     return (
       <div id="majorSystemInput">
-        <LengthSelect value={majorNumberLength} handleChange={(event) => this.onSelectChange(event.target.value)} />
+        <LengthSelect value={majorNumberLength} handleChange={(event) => this.onRangeChange(event.target.value)} />
         <div id="inputs">{this.getInputArray()}</div>
         <AuthUserContext.Consumer>
           {
@@ -83,6 +110,8 @@ class MajorSystemInputs extends React.Component {
     );
   }
 }
+
+
 
 function returnNextCount(countActual) {
   const strCountActual = "" + countActual;
@@ -105,11 +134,12 @@ function returnNextCount(countActual) {
 }
 
 
-const Input = ({ pos, value, onChange, cl}) => {
+const Input = ({ pos, value, onChange, cl, r }) => {
   return (
     <div className={`majorInputItem ${cl}`}>
     <TextField
       className={cl}
+      ref={r}
       variant="outlined"
       fullWidth
       type="text"
@@ -123,23 +153,22 @@ const Input = ({ pos, value, onChange, cl}) => {
 }
 
 const LengthSelect = ({ value, handleChange }) =>
-  <FormControl variant="outlined">
-    <InputLabel htmlFor="outlined-age-simple">age</InputLabel>
-    <Select
-      value={value}
-      onChange={handleChange}
-      input={
-        <OutlinedInput
-          labelWidth={10}
-          name="age"
-          id="outlined-age-simple"
-        />
-      }
-    >
-      <MenuItem value={1}> One </MenuItem>
-      <MenuItem value={2}> Two </MenuItem>
-    </Select>
-  </FormControl>
+<div>
+<input
+type="range"
+label="range"
+min="1"
+max="2"
+step="1"
+value={value}
+onChange={handleChange}
+/>
+<datalist id="tickmarks">
+  <option value="1" label="1" />
+  <option value="2" label="2" />
+</datalist>
+</div>
 
-
-export default MajorSystemInputs;
+const majorNumberInputElement = withMajorNumbers(MajorSystemInputs);
+const authCondition = (authUser) => !!authUser;
+export default withAuthorization(authCondition)(majorNumberInputElement);

@@ -13,12 +13,12 @@ import MajorInputs from "./components/MajorSystemInput";
 import withAuthentication from './components/withAuthentication';
 
 
-const App = ({authUser}) => {
+const App = () => {
   
     return (
       <Router>
         <div>
-          <Navigation authUser={authUser}/>
+          <Navigation/>
 
           <hr />
 

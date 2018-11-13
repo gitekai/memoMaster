@@ -12,8 +12,7 @@ db.ref(`mayorSystems/${userID}`).set(
 )
 
 const onceGetMajorSystem = (userID ) => {
-console.log(userID)
-  return db.ref(`mayorSystems`).once('value');
+  return db.ref(`mayorSystems/${userID}`).once('value');
 }
 
 const onceGetUsers = () => 

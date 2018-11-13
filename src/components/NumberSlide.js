@@ -3,20 +3,7 @@ import "./NumberSlide.css";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import NumberToMajor from "./NumberToMajor";
 import PositionToPlace from "./PositionToPlace";
-
-const majorSystem = {
-  "00":"sosse",
-  "01": "seide",
-  "02": "sahne",
-  "03": "Zaum", 
-  "04": "Zar",
-  "05": "Seil",
-  "06": "Sushi",
-  "07": "Socke",
-  "08": "Seife",
-  "09": "Suppe"
-}
-
+import withMajorNumber from './withMajorNumber';
 
 class NumberSlide extends React.Component {
   state = {
@@ -78,7 +65,7 @@ class NumberSlide extends React.Component {
   };
 
   render() {
-    const { children } = this.props;
+    const { children, majorSystem } = this.props;
     const { isLastSlide, position } = this.state;
 
     const maxPosition = this.getMaxPosition();
@@ -121,4 +108,4 @@ class NumberSlide extends React.Component {
   }
 }
 
-export default NumberSlide;
+export default withMajorNumber(NumberSlide);

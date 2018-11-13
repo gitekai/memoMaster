@@ -16,7 +16,7 @@ class NumberToMajor extends React.Component {
 
     render() {
         const {showsMajor} = this.state; 
-        const {number, numberToMajorObj } = this.props; 
+        const {number, numberToMajorObj = {} } = this.props; 
 
         const majorNumber = (numberToMajorObj[number]) ? numberToMajorObj[number] : "N/A" ; 
         return (

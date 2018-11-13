@@ -1,29 +1,31 @@
-import React from 'react'; 
-import { database } from '../firebase';
+import React from "react";
+import { database } from "../firebase";
+import AuthUserContext from './AuthUserContext';
 
-const withMajorNumber = (Component) => {
-    class WithMajorNumber extends React.Component {
-        state = {
-            inputs: {},
-        }
 
-        componentDidMount() {
-            database.onceGetMajorSystem().then(snapshot => {
-              const a = snapshot.val()
-              const firstID = Object.keys(a)[0]
-              const majorSystem = a[firstID];
-              this.setState({ inputs: majorSystem })
-            });
+const withMajorNumber = Component => {
+  class WithMajorNumber extends React.Component {
+    static contextType = AuthUserContext;
+    state = {
+      majorSystem: {}
+    };
+
+    componentDidMount() {
+      database.onceGetMajorSystem(this.context.uid).then(snapshot => {
+        this.setState({ majorSystem: snapshot.val() });
+      });
     }
 
-    render(){
-        return(
-            <Component {...this.props} />
-        );
+    render() {
+      return (
+        <Component
+          {...this.props}
+          majorSystem={this.state.majorSystem}
+        />
+      );
     }
-}
-return WithMajorNumber;
+  }
+  return WithMajorNumber;
+};
 
-}
-
-export default withMajorNumber; 
+export default withMajorNumber;
