@@ -1,0 +1,14 @@
+#inputs {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+}
+
+.majorInputItem{
+    width: 31%;
+    margin: 1% 1%;
+}
+
+.extraSpace{
+    margin-right: 66%;
+}
