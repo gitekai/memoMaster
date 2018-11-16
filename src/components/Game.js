@@ -5,7 +5,7 @@ import Answer from "./Answer";
 import Countdown from "./Counter";
 import "./Game.css";
 
-const NUMBER_LENGTH = 20;
+const DIGITS_TOTAL = 20;
 const MAX_NUMBER_LENGTH = 2; 
 const ANSWER_WAITING_TIME = 10;
 
@@ -23,15 +23,15 @@ class Game extends React.Component {
     number: "",
     gameStart: null,
     gameEnd: null,
-    wantsToAnswer: false,
-    hasWaitedToAnswer: false,
+    wantsToAnswer: true,
+    hasWaitedToAnswer: true,
     answer: [],
   };
 
   startGame = () => {
     this.setState({
       gameStart: Date.now(),
-      number: generateRandomNumber(NUMBER_LENGTH)
+      number: generateRandomNumber(DIGITS_TOTAL)
     });
   };
 
@@ -98,7 +98,7 @@ class Game extends React.Component {
             onAnswerChange={this.onAnswerChange}
             onAnswerSubmit={this.onAnswerSubmit}
             maxNumLength={MAX_NUMBER_LENGTH}
-            numLength={NUMBER_LENGTH}
+            digitsTotal={DIGITS_TOTAL}
           />
         </div>
       );

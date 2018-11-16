@@ -1,4 +1,6 @@
 import React from "react";
+import './Counter.css';
+
 
 class Counter extends React.Component {
   state = {
@@ -44,8 +46,8 @@ class Counter extends React.Component {
   render() {
     return (
       <div id="counter">
-        <div id="number" >Please wait for {this.state.counter} Seconds</div>
-      </div>
+        <div id="counternumber" >Please wait for {this.state.counter} seconds</div>
+    </div>
     );
   }
 }

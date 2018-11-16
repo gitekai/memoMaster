@@ -7,6 +7,10 @@ import withMajorNumbers from "./withMajorNumber";
 import { database } from "../firebase";
 import ReactDOM from "react-dom";
 import Snackbar from "@material-ui/core/Snackbar";
+import SaveIcon from '@material-ui/icons/Save'
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+
 
 import "./MajorSystem.css";
 
@@ -26,11 +30,11 @@ const initialState = majorNumberLength => {
 const initialMajorSize = 2;
 class MajorSystemInputs extends React.Component {
   state = {
-    inputs: initialState(initialMajorSize),
+    inputs : initialState(initialMajorSize),
     majorNumberLength: initialMajorSize,
     actualFocusItem: null,
     focusRef: {},
-    snackbarOpen: false
+    snackbarOpen: false,
   };
 
   onSnackbarClose = () => {
@@ -65,11 +69,6 @@ class MajorSystemInputs extends React.Component {
 
     this.setState({ inputs: nextProps.majorSystem });
   }
-  onRangeChange = value => {
-    this.setState({
-      majorNumberLength: 1 * value
-    });
-  };
 
   onInputChange = (event, displayNumber) => {
     const value = event.target.value;
@@ -80,8 +79,9 @@ class MajorSystemInputs extends React.Component {
     );
 
     this.setState(currVal => {
-      const focusItem = /\s+$/.test(value)
-        ? returnNextCount(activeKey)
+      const nextItem = returnNextCount(activeKey)
+      const focusItem = /\s+$/.test(value) && nextItem.length === currVal.majorNumberLength
+        ? nextItem
         : activeKey;
       return {
         inputs: { ...currVal.inputs, [displayNumber]: value },
@@ -95,6 +95,10 @@ class MajorSystemInputs extends React.Component {
       const refObj = currState.focusRef;
       return { focusRef: { ...refObj, [obj]: ref } };
     });
+  };
+
+  handleTabChange = (event, value) => {
+    this.setState({ majorNumberLength: value, actualFocusItem: null });
   };
 
   getInputArray() {
@@ -136,23 +140,28 @@ class MajorSystemInputs extends React.Component {
     const { majorNumberLength, snackbarOpen } = this.state;
     return (
       <div id="majorSystemInput">
-        <LengthSelect
-          value={majorNumberLength}
-          handleChange={event => this.onRangeChange(event.target.value)}
-        />
+      <div id="majorLengthTabs">
+      <Tabs value={majorNumberLength} onChange={this.handleTabChange}>
+            <Tab label="1 digit MayorSystem" value={1}/>
+            <Tab label="2 digits MayorSystem" value={2}/>
+       </Tabs>
+       </div>
+
         <div id="inputs">{this.getInputArray()}</div>
         <SnackAlert openVal={snackbarOpen} closeHandler={this.onSnackbarClose} />
         <AuthUserContext.Consumer>
           {authUser => (
+            <div id="fab">
             <Button
-              variant="contained"
+              variant="fab"
               color="primary"
               onClick={() => {
                 this.onSubmit(authUser);
               }}
             >
-              Submit that shit
+              <SaveIcon />
             </Button>
+            </div>
           )}
         </AuthUserContext.Consumer>
       </div>
@@ -179,42 +188,6 @@ function returnNextCount(countActual) {
     return `${zeros}${nextNumber}`;
   }
 }
-
-const Input = ({ pos, value, onChange, cl, r }) => {
-  return (
-    <div className={`majorInputItem ${cl}`}>
-      <TextField
-        className={cl}
-        ref={r}
-        variant="outlined"
-        fullWidth
-        type="text"
-        label={pos}
-        key={pos}
-        onChange={onChange}
-        value={value}
-      />
-    </div>
-  );
-};
-
-const LengthSelect = ({ value, handleChange }) => (
-  <div>
-    <input
-      type="range"
-      label="range"
-      min="1"
-      max="2"
-      step="1"
-      value={value}
-      onChange={handleChange}
-    />
-    <datalist id="tickmarks">
-      <option value="1" label="1" />
-      <option value="2" label="2" />
-    </datalist>
-  </div>
-);
 
 const SnackAlert = ({openVal,closeHandler}) => 
 <Snackbar

@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import * as routes from "./constants/routes";
 import SignOut from "./components/SignOut";
 import AuthUserContext from './components/AuthUserContext';
+import './Navigation.css';
 
 const NavigationAuth = () => (
-  <ul>
+  <ul id="nav">
     <li>
       <Link to={routes.HOME}>HOME</Link>
     </li>
@@ -28,7 +29,7 @@ const NavigationAuth = () => (
 );
 
 const NavigationNonAuth = () => (
-  <ul>
+  <ul id="nav">
     <li>
       <Link to={routes.SIGNIN}>SIGN IN</Link>
     </li>
