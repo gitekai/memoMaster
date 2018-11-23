@@ -65,6 +65,8 @@ class AnswerII extends React.Component {
           });
         };
         const answerGrouped = updateAnswer(newActiveIndex, newInput);
+        // Fix inputs with empty String 
+        const answerGroupedWithoutEmptyString = answerGrouped.map(input => input.length === 0 ? 'X'.repeat(maxNumLength) : input );
         
         if (inputVal.length === maxNumLength) {
           newInput = "";
@@ -73,7 +75,7 @@ class AnswerII extends React.Component {
 
 
         return {
-          answerGrouped,
+          answerGrouped: answerGroupedWithoutEmptyString,
           inputVal: newInput,
           activeIndex: newActiveIndex
         };
@@ -84,9 +86,12 @@ class AnswerII extends React.Component {
     );
   };
 
+  onAnswerSubmit = () => {
+    this.props.onAnswerSubmit(true);
+  }
+
   render() {
     const { inputVal, answerGrouped, activeIndex } = this.state;
-    const { onAnswerSubmit } = this.props;
     return (
       <div id="answer">
         <div id="answerGrouped">
@@ -110,7 +115,7 @@ class AnswerII extends React.Component {
             <Button
               className="answerButton"
               variant="fav"
-              onClick={onAnswerSubmit}
+              onClick={this.onAnswerSubmit}
             >
               <DoneIcon />
             </Button>

@@ -20,6 +20,7 @@
   font-weight: 100;
   flex-basis: 70%;
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
 }
@@ -29,4 +30,19 @@
 }
 #giposition.nonActive {
   background: lightgray;
+}
+
+.win {
+  color:green;
+}
+#giposition.right {
+  background: #80d680;
+  padding:0.4em;
+}
+#giposition.wrong {
+  background: #bf7b7b;
+}
+
+.loose {
+  color:red;
 }

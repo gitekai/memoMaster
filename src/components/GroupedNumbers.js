@@ -9,8 +9,6 @@ class GroupedNumber extends React.Component {
 
   produceNumberArray() {
     const { answer = [], activeIndex = 0 } = this.props;
-    console.log("anser =======");
-    console.log(answer)
     return answer.map((group, idx) => {
       const isActive = idx === activeIndex ? true : false;
       return (

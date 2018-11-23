@@ -14,12 +14,11 @@ import withAuthentication from "./components/withAuthentication";
 import Drawer from "@material-ui/core/Drawer";
 import TopAppBar from './components/materialUI/TopAppBar';
 import './App.css';
-import Answer from './components/Answer.1';
+import Result from './components/Results';
 
-
-// const App = () => {
-//   return <Answer locationCount={10}/>
-// }
+//  const App = () => {
+//    return <Result answerArr={[22,33,44]} numberAsked={123345} maxDigitLength={2}/>
+//  }
 
 
 class App extends React.Component {

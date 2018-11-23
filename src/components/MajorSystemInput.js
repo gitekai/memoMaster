@@ -142,8 +142,9 @@ class MajorSystemInputs extends React.Component {
       <div id="majorSystemInput">
       <div id="majorLengthTabs">
       <Tabs value={majorNumberLength} onChange={this.handleTabChange}>
-            <Tab label="1 digit MayorSystem" value={1}/>
-            <Tab label="2 digits MayorSystem" value={2}/>
+            <Tab label="1 Digit Pegs" value={1}/>
+            <Tab label="2 Digit Pegs" value={2}/>
+            <Tab label="3 Digit Pegs" value={3}/>
        </Tabs>
        </div>
 

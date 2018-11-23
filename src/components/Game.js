@@ -3,11 +3,12 @@ import NumberSlide from "./NumberSlide";
 import Button from "@material-ui/core/Button";
 import Answer from "./Answer";
 import Countdown from "./Counter";
+import Result from './Results';
 import "./Game.css";
 
 const DIGITS_TOTAL = 20;
 const MAX_NUMBER_LENGTH = 2; 
-const ANSWER_WAITING_TIME = 10;
+const ANSWER_WAITING_TIME = 1;
 
 
 function generateRandomNumber(desiredLength) {
@@ -23,8 +24,9 @@ class Game extends React.Component {
     number: "",
     gameStart: null,
     gameEnd: null,
-    wantsToAnswer: true,
-    hasWaitedToAnswer: true,
+    wantsToAnswer: false,
+    hasWaitedToAnswer: false,
+    hasAnswered: false,
     answer: [],
   };
 
@@ -45,13 +47,7 @@ class Game extends React.Component {
 
   onAnswerSubmit = () => {
     const { answer, number } = this.state;
-    this.setState({gameEnd: Date.now()});
-
-    if (answer === number) {
-      alert("you won");
-    } else {
-      alert("you loose");
-    }
+    this.setState({gameEnd: Date.now(), hasAnswered: true});
   };
 
   onCountDownEnd = (val) => {
@@ -59,7 +55,7 @@ class Game extends React.Component {
   }
 
   render() {
-    const { gameStart, number, wantsToAnswer, hasWaitedToAnswer } = this.state;
+    const { gameStart, number, wantsToAnswer, hasWaitedToAnswer, answer, hasAnswered } = this.state;
 
     if (gameStart === null) {
       return (
@@ -71,7 +67,7 @@ class Game extends React.Component {
       );
     }
 
-    if (!wantsToAnswer) {
+    if (!wantsToAnswer  && !hasAnswered) {
       return (
         <div id="mainContent">
           <NumberSlide digits={number} maxNumberLength={MAX_NUMBER_LENGTH}>
@@ -83,7 +79,7 @@ class Game extends React.Component {
       );
     }
 
-    if (wantsToAnswer && ! hasWaitedToAnswer) {
+    if (wantsToAnswer && ! hasWaitedToAnswer && !hasAnswered) {
       return (
         <div id="mainContent">
           <Countdown counter={ANSWER_WAITING_TIME} onCountdownEnd={this.onCountDownEnd} />
@@ -91,7 +87,7 @@ class Game extends React.Component {
       );
     }
 
-    if(hasWaitedToAnswer){
+    if(hasWaitedToAnswer && !hasAnswered){
       return (
         <div id="mainContent">
           <Answer
@@ -102,6 +98,10 @@ class Game extends React.Component {
           />
         </div>
       );
+
+    }
+    if(hasAnswered){
+      return <Result answer={answer} numberAsked={number} maxDigitLength={MAX_NUMBER_LENGTH} />
     }
 
   }
