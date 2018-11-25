@@ -17,8 +17,8 @@ class NumberToMajor extends React.Component {
     render() {
         const {showsMajor} = this.state; 
         const {number, numberToMajorObj = {} } = this.props; 
-
-        const majorNumber = (numberToMajorObj[number]) ? numberToMajorObj[number] : "N/A" ; 
+        console.log(typeof numberToMajorObj)
+        const majorNumber = (typeof numberToMajorObj === 'object' && numberToMajorObj[number]) ? numberToMajorObj[number] : "N/A" ; 
         return (
 
             <div id="numberToMajor" onClick={this.toggleShowMajor}>

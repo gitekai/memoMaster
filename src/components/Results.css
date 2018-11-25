@@ -7,12 +7,12 @@
 
 .numberGroup {
   width: 9.5%;
-  margin-right: 0.5%
+  margin: 0.5% 0.5%
 }
 
 @media (max-width: 40em) {
   .numberGroup {
-    width: 19%;
+    width: 18%;
     margin-right: 1%;
     margin-top: 0.5em;
   }

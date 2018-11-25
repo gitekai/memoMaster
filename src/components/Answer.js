@@ -5,16 +5,10 @@ import Button from "@material-ui/core/Button";
 import DoneIcon from "@material-ui/icons/Done";
 import "./Answer.css";
 
-class AnswerII extends React.Component {
+class Answer extends React.Component {
   state = {
     inputVal: "",
-    answerGrouped: [],
     activeIndex: 0,
-  };
-
-  componentDidMount = () => {
-    this.setState(
-      { answerGrouped: this.initiateAnswerGroups() });
   };
 
   componentDidUpdate(){
@@ -22,24 +16,6 @@ class AnswerII extends React.Component {
       this.activeInput.focus();
     }
   }
-
-  initiateAnswerGroups = () => {
-    const { maxNumLength = 1, digitsTotal = 1 } = this.props;
-
-    let countTotal = 0;
-    const initialArray = [];
-
-    while (countTotal < digitsTotal) {
-      let placeHolder = "";
-      for (let i = 0; i < maxNumLength && countTotal < digitsTotal; i++) {
-        placeHolder += "X";
-        countTotal++;
-      }
-      initialArray.push(placeHolder);
-    }
-
-    return initialArray;
-  };
 
   onActiveIndexChange = val => {
     this.setState({ activeIndex: val });
@@ -49,54 +25,37 @@ class AnswerII extends React.Component {
     const { maxNumLength, digitsTotal } = this.props;
     const inputVal = e.target.value;
 
-    this.setState(
-      currState => {
-        const currAnswers = currState.answerGrouped;
-        let newInput = inputVal;
-        let newActiveIndex = currState.activeIndex;
-        
-        const updateAnswer = (index, value) => {
-          return currAnswers.map((answer, idx) => {
-            if (idx === index) {
-              return value;
-            } else {
-              return answer;
-            }
-          });
-        };
-        const answerGrouped = updateAnswer(newActiveIndex, newInput);
-        // Fix inputs with empty String 
-        const answerGroupedWithoutEmptyString = answerGrouped.map(input => input.length === 0 ? 'X'.repeat(maxNumLength) : input );
+     this.setState(
+       currState => {
+         let newInput = inputVal;
+         let newActiveIndex = currState.activeIndex;
         
         if (inputVal.length === maxNumLength) {
           newInput = "";
           newActiveIndex = (currState.activeIndex + 1) % (digitsTotal / maxNumLength);
         }
 
-
         return {
-          answerGrouped: answerGroupedWithoutEmptyString,
           inputVal: newInput,
           activeIndex: newActiveIndex
         };
       },
-      () => {
-        this.props.onAnswerChange(this.state.answerGrouped.join(""));
-      }
+      this.props.onAnswerChange(inputVal,this.state.activeIndex)
     );
   };
 
   onAnswerSubmit = () => {
-    this.props.onAnswerSubmit(true);
+    this.props.onAnswerSubmit();
   }
 
   render() {
     const { inputVal, answerGrouped, activeIndex } = this.state;
+    const {answer} = this.props; 
     return (
       <div id="answer">
         <div id="answerGrouped">
           <GroupedNumbers
-            answer={answerGrouped}
+            answer={answer}
             activeIndex={activeIndex}
             setActiveIndex={this.onActiveIndexChange}
           />
@@ -126,4 +85,4 @@ class AnswerII extends React.Component {
   }
 }
 
-export default AnswerII;
+export default Answer;

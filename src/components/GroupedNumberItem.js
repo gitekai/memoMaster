@@ -4,7 +4,7 @@ import './GroupedNumberItem.css';
 
 function GroupNumberItem(props){
 
-  const {number="", position, isActive,solutionNumber,className} = props; 
+  const {position, isActive,solutionNumber,className, children} = props; 
   const loosingNumberClass = (solutionNumber)? 'loose' : '';
   const cl = (isActive) ? 'isActive' : 'nonActive';
 
@@ -15,7 +15,7 @@ function GroupNumberItem(props){
       </div>
       <div id="ginumber">
         <div className={`numberItem ${loosingNumberClass}`}>
-        {number}
+        {children}
         </div>
         <div className={'numberItem win'}>
         {solutionNumber}

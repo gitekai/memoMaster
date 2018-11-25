@@ -4,5 +4,13 @@
   display: flex; 
   justify-content: center;
   align-items: center;
- 
+}
+
+#fab {
+  margin: 0;
+  top: auto;
+  right: 1%;
+  bottom: 2%;
+  left: auto;
+  position: fixed;
 }
