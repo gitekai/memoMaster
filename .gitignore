@@ -2,8 +2,11 @@
 
 # dependencies
 /node_modules
+<<<<<<< HEAD
 /.pnp
 .pnp.js
+=======
+>>>>>>> tmp
 
 # testing
 /coverage

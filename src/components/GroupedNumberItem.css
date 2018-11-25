@@ -1,0 +1,47 @@
+#groupedNumber {
+  display: flex;
+  width:100%;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 0.25em;
+}
+#giposition {
+  flex-basis: 30%;
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.2em;
+  border-radius:inherit;
+}
+#ginumber {
+  font-size: 1em;
+  font-weight: 100;
+  flex-basis: 70%;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#giposition.isActive {
+  background: gray;
+}
+#giposition.nonActive {
+  background: lightgray;
+}
+
+.win {
+  color:green;
+}
+#giposition.right {
+  background: rgba(43, 108, 50, 0.15);
+  padding: 0.4em;
+}
+#giposition.wrong {
+  background:#fe414121;
+}
+
+.loose {
+  color:red;
+}
