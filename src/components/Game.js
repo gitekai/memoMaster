@@ -6,11 +6,11 @@ import Countdown from "./Counter";
 import Result from "./Results";
 import "./Game.css";
 import TextField from "@material-ui/core/TextField";
-import NextIcon from '@material-ui/icons/NavigateNext';
+import NextIcon from "@material-ui/icons/NavigateNext";
+import AuthUserContext from "./AuthUserContext";
 
-const DIGITS_TOTAL = 10;
 const MAX_NUMBER_LENGTH = 2;
-const ANSWER_WAITING_TIME = 1;
+const ANSWER_WAITING_TIME = 10;
 const PLACEHOLDER = "X";
 
 const generateRandomNumber = desiredLength => {
@@ -141,9 +141,13 @@ class Game extends React.Component {
             type="number"
           />
           <div id="fab">
-          <Button color="primary" variant="fab" onClick={this.startMemorization}>
-            <NextIcon />
-          </Button>
+            <Button
+              color="primary"
+              variant="fab"
+              onClick={this.startMemorization}
+            >
+              <NextIcon />
+            </Button>
           </div>
         </div>
       );
@@ -153,7 +157,11 @@ class Game extends React.Component {
       return (
         <div id="mainContent">
           <NumberSlide digits={number} maxNumberLength={MAX_NUMBER_LENGTH}>
-            <Button variant="contained" color="primary" onClick={this.finishedMemorization}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.finishedMemorization}
+            >
               FINISHED ?¿
             </Button>
           </NumberSlide>
@@ -170,6 +178,7 @@ class Game extends React.Component {
           />
         </div>
       );
+      
     }
 
     if (gameState === gameStates.RECALL) {
@@ -187,17 +196,22 @@ class Game extends React.Component {
     }
     if (gameState === gameStates.SHOW_RESULTS) {
       return (
-        <Result
-          numberAsked={number}
-          answer={answer}
-          maxDigitLength={MAX_NUMBER_LENGTH}
-          timeTaken={{
-            memorizationStart,
-            memorizationEnd,
-            recallStart,
-            recallEnd
-          }}
-        />
+        <AuthUserContext.Consumer>
+          {authUser => (
+            <Result
+              authUser = {authUser}
+              numberAsked={number}
+              answer={answer}
+              maxDigitLength={MAX_NUMBER_LENGTH}
+              timeTaken={{
+                memorizationStart,
+                memorizationEnd,
+                recallStart,
+                recallEnd
+              }}
+            />
+          )}
+        </AuthUserContext.Consumer>
       );
     }
   }

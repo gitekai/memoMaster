@@ -1,14 +1,25 @@
 #result {
-  margin-top:1em;
-  display: flex; 
-  flex-flow: row wrap;
   width:100%;
 }
 
+#resultBoxes{
+  margin-top:1em;
+  display: flex; 
+  flex-flow: row wrap;
+}
+#resultText {
+  padding: 1em;
+}
+
 .numberGroup {
-  width: 9.5%;
+  width: 9%;
   margin: 0.5% 0.5%
 }
+
+.text {
+  text-align: center;
+}
+
 
 @media (max-width: 40em) {
   .numberGroup {

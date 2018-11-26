@@ -73,7 +73,7 @@ class Answer extends React.Component {
           <div id="answerButton" className="fab">
             <Button
               className="answerButton"
-              variant="fav"
+              variant="fab"
               onClick={this.onAnswerSubmit}
             >
               <DoneIcon />

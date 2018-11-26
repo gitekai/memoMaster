@@ -15,7 +15,8 @@ class Result extends React.Component {
       timeTaken: { memorizationEnd, memorizationStart, recallEnd, recallStart },
       maxDigitLength,
       answer,
-      numberAsked
+      numberAsked,
+      authUser
     } = this.props;
 
     const solutions = createArraywMaxLength(numberAsked, maxDigitLength);
@@ -33,24 +34,32 @@ class Result extends React.Component {
       );
     }, 0);
 
-    database.doCreateNumberGameResults({
+    const recallTimeInSec = Number.parseInt((recallEnd - recallStart) / 1000);
+    const memorizationTimeInSec = Number.parseInt(
+      (memorizationEnd - memorizationStart) / 1000
+    );
+
+    this.setState({
       correctNums,
-      digitsTotal: numberAsked.length,
-      recallTimeInSec: Number.parseInt((recallEnd - recallStart) / 1000),
-      memorizationTimeInSec: Number.parseInt(
-        (memorizationEnd - memorizationStart) / 1000
-      ),
-      userID: "KBvoo76quhawWtzHfSm98h6dTI12"
+      recallTimeInSec,
+      memorizationTimeInSec
     });
+
+    if (authUser) {
+      database.doCreateNumberGameResults({
+        correctNums,
+        digitsTotal: numberAsked.length,
+        recallTimeInSec: Number.parseInt((recallEnd - recallStart) / 1000),
+        memorizationTimeInSec: Number.parseInt(
+          (memorizationEnd - memorizationStart) / 1000
+        ),
+        userID: authUser.uid
+      });
+    }
   }
 
   render() {
-    const {
-      answer = [],
-      numberAsked = "",
-      maxDigitLength = 1,
-      timeTaken: { memorizationStart, memorizationEnd, recallStart, recallEnd }
-    } = this.props;
+    const { answer = [], numberAsked = "", maxDigitLength = 1 } = this.props;
 
     const solutions = createArraywMaxLength(numberAsked, maxDigitLength);
 
@@ -83,7 +92,23 @@ class Result extends React.Component {
       );
     });
 
-    return <div id="result">{guessedNumber}</div>;
+    return (
+      <div id="result">
+        <div id="resultBoxes">{guessedNumber}</div>
+        <div id="resultText">
+          <p>
+            <div className="text">
+              You had {this.state.correctNums} right of{" "}
+              {this.props.numberAsked.length}
+            </div>
+            <div className="text">
+              You took to remember {this.state.memorizationTimeInSec} seconds
+            </div>
+            <div className="text">You took to recall {this.state.recallTimeInSec} seconds</div>
+          </p>
+        </div>
+      </div>
+    );
   }
 }
 

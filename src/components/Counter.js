@@ -37,7 +37,7 @@ class Counter extends React.Component {
       return { counter: newCounter, hasFinished}
 
     }, 
-    () => { this.props.onCountdownEnd(this.state.hasFinished) }
+    () => { this.state.hasFinished && this.props.onCountdownEnd() }
     );
 
     this.countOneDown();
