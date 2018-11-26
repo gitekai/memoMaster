@@ -1,7 +1,6 @@
 #groupedNumber {
   display: flex;
   width:100%;
-  height: 100%;
   border-style: solid;
   border-width: 1px;
   border-radius: 0.25em;
@@ -36,11 +35,11 @@
   color:green;
 }
 #giposition.right {
-  background: #80d680;
-  padding:0.4em;
+  background: rgba(43, 108, 50, 0.15);
+  padding: 0.4em;
 }
 #giposition.wrong {
-  background: #bf7b7b;
+  background:#fe414121;
 }
 
 .loose {

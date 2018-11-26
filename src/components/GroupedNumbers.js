@@ -15,12 +15,11 @@ class GroupedNumber extends React.Component {
         <div className="item" key={idx}>
           <NumberItem
             isActive={isActive}
-            number={group}
             position={idx + 1}
             onSelect={() => {
               this.setActiveIndex(idx);
             }}
-          />
+          >{group}</NumberItem>
         </div>
       );
     });
